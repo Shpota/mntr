@@ -1,1 +1,1 @@
-# mntr
+# mntr [![Build](https://github.com/Shpota/mntr/actions/workflows/build.yml/badge.svg)](https://github.com/Shpota/mntr/actions/workflows/build.yml)
