@@ -1,4 +1,4 @@
-package mntr.shpota.com.plugins
+package com.shpota.mntr.plugins
 
 import io.ktor.routing.*
 import io.ktor.http.*

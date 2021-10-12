@@ -7,10 +7,10 @@ plugins {
     kotlin("jvm") version "1.5.31"
 }
 
-group = "mntr.shpota.com"
+group = "com.shpota.mntr"
 version = "0.0.1"
 application {
-    mainClass.set("mntr.shpota.com.ApplicationKt")
+    mainClass.set("com.shpota.mntr.ApplicationKt")
 }
 
 repositories {

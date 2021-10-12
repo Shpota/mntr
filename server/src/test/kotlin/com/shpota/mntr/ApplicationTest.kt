@@ -1,5 +1,6 @@
-package mntr.shpota.com
+package com.shpota.mntr
 
+import com.shpota.mntr.plugins.configureRouting
 import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*

@@ -1,4 +1,4 @@
-package mntr.shpota.com.plugins
+package com.shpota.mntr.plugins
 
 import io.ktor.http.cio.websocket.*
 import io.ktor.websocket.*
