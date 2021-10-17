@@ -13,8 +13,8 @@ data class Service(
     val id: String = randomUUID().toString(),
     val name: String,
     val url: String,
-    val createdDate: Long = Instant.now().toEpochMilli(),
-    val status: ServiceStatus = UNKNOWN,
+    val createdDate: Long,
+    val status: ServiceStatus,
 )
 
 @Serializable
@@ -27,7 +27,7 @@ enum class ServiceStatus {
     @SerialName("UNAVAILABLE")
     UNAVAILABLE,
     @SerialName("UNKNOWN")
-    UNKNOWN
+    UNKNOWN,
 }
 
 fun String.asServiceStatus(): ServiceStatus = when (this) {
