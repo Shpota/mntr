@@ -3,6 +3,7 @@ package com.shpota.mntr.plugins
 import com.shpota.mntr.db.Services
 import com.shpota.mntr.models.CreateServiceRequest
 import com.shpota.mntr.models.Service
+import com.shpota.mntr.models.ServiceStatus.UNKNOWN
 import com.shpota.mntr.models.asServiceStatus
 import io.ktor.application.*
 import io.ktor.http.*
@@ -12,10 +13,12 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.time.Instant
 
 fun Application.configureRouting(sessions: Set<DefaultWebSocketServerSession>) {
     routing {
@@ -35,7 +38,12 @@ fun Application.configureRouting(sessions: Set<DefaultWebSocketServerSession>) {
         }
         post("/services") {
             val request = call.receive<CreateServiceRequest>()
-            val service = Service(name = request.name, url = request.url)
+            val service = Service(
+                name = request.name,
+                url = request.url,
+                createdDate = Instant.now().toEpochMilli(),
+                status = UNKNOWN
+            )
             transaction {
                 Services.insert {
                     it[id] = service.id
@@ -46,7 +54,7 @@ fun Application.configureRouting(sessions: Set<DefaultWebSocketServerSession>) {
                 }
             }
             launch {
-                val json = Json.encodeToString(Service.serializer(), service)
+                val json = Json.encodeToString(service)
                 sessions.forEach { it.send(json) }
             }
             call.respond(HttpStatusCode.Created, service)

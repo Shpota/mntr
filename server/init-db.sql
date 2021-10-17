@@ -4,5 +4,5 @@ CREATE TABLE services
     name         VARCHAR(255),
     url          TEXT,
     created_date BIGINT,
-    status       VARCHAR(10)
+    status       VARCHAR(20)
 );

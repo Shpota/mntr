@@ -7,7 +7,7 @@ object Services : Table() {
     val name = varchar("name", 255)
     val url = text("url")
     val createdDate = long("created_date")
-    val status = varchar("status", 10)
+    val status = varchar("status", 20)
 
     override val primaryKey = PrimaryKey(id)
 }

@@ -4,6 +4,7 @@ import com.shpota.mntr.plugins.configureRouting
 import com.shpota.mntr.plugins.configureSerialization
 import com.shpota.mntr.plugins.configureSockets
 import com.shpota.mntr.plugins.startDatabase
+import com.shpota.mntr.schedule.scheduleServiceVerification
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.websocket.*
@@ -16,5 +17,6 @@ fun main() {
         configureSerialization()
         configureRouting(sessions)
         configureSockets(sessions)
+        scheduleServiceVerification(sessions, intervalSeconds = 30)
     }.start(wait = true)
 }
