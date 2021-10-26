@@ -1,7 +1,7 @@
 package com.shpota.mntr.models
 
-import com.shpota.mntr.models.ServiceStatus.AVAILABLE
-import com.shpota.mntr.models.ServiceStatus.UNAVAILABLE
+import com.shpota.mntr.models.ServiceStatus.OK
+import com.shpota.mntr.models.ServiceStatus.FAIL
 import com.shpota.mntr.models.ServiceStatus.UNKNOWN
 import kotlinx.serialization.Serializable
 import java.util.UUID.randomUUID
@@ -18,10 +18,10 @@ data class Service(
 @Serializable
 data class CreateServiceRequest(val name: String, val url: String)
 
-enum class ServiceStatus { AVAILABLE, UNAVAILABLE, UNKNOWN }
+enum class ServiceStatus { OK, FAIL, UNKNOWN }
 
 fun String.asServiceStatus(): ServiceStatus = when (this) {
-    AVAILABLE.name -> AVAILABLE
-    UNAVAILABLE.name -> UNAVAILABLE
+    OK.name -> OK
+    FAIL.name -> FAIL
     else -> UNKNOWN
 }

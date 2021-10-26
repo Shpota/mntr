@@ -3,14 +3,14 @@ package com.shpota.mntr.schedule
 import com.shpota.mntr.db.Services
 import com.shpota.mntr.models.Service
 import com.shpota.mntr.models.ServiceStatus
-import com.shpota.mntr.models.ServiceStatus.AVAILABLE
-import com.shpota.mntr.models.ServiceStatus.UNAVAILABLE
+import com.shpota.mntr.models.ServiceStatus.FAIL
+import com.shpota.mntr.models.ServiceStatus.OK
 import io.ktor.application.*
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.http.HttpStatusCode.Companion.OK
+import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.delay
@@ -36,7 +36,7 @@ fun Application.scheduleServiceVerification(sessions: Set<DefaultWebSocketServer
                     launch {
                         try {
                             val response: HttpResponse = client.get(url)
-                            val newStatus = if (response.status == OK) AVAILABLE else UNAVAILABLE
+                            val newStatus = if (response.status == HttpStatusCode.OK) OK else FAIL
                             if (status != newStatus.name) {
                                 updateStatus(serviceId, newStatus)
                                 val json = Json.encodeToString(Service(serviceId, name, url, createdDate, newStatus))
@@ -45,9 +45,9 @@ fun Application.scheduleServiceVerification(sessions: Set<DefaultWebSocketServer
                                 }
                             }
                         } catch (e: Exception) {
-                            if (status != UNAVAILABLE.name) {
-                                updateStatus(serviceId, UNAVAILABLE)
-                                val json = Json.encodeToString(Service(serviceId, name, url, createdDate, UNAVAILABLE))
+                            if (status != FAIL.name) {
+                                updateStatus(serviceId, FAIL)
+                                val json = Json.encodeToString(Service(serviceId, name, url, createdDate, FAIL))
                                 sessions.forEach {
                                     it.send(json)
                                 }
