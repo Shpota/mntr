@@ -10,7 +10,7 @@ services:
       - ./server/init-db.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: pg_isready -U mntr -d mntr
-      interval: 30s
+      interval: 10s
       timeout: 3s
       retries: 10
   mntr-server:
@@ -27,8 +27,8 @@ services:
       DB_PASSWORD: mntr
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/services" ]
-      interval: 30s
-      timeout: 10s
+      interval: 10s
+      timeout: 5s
       retries: 10
   mntr-client:
     build: client
