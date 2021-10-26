@@ -25,6 +25,8 @@ function ServicesTable() {
         }
     }, [lastJsonMessage])
 
+    let formattedDate = (time) => new Date(time).toISOString().slice(0, 16).replace('T',' ')
+
     return (
         <>
             {services && services.length > 0 && (<table className="services-table">
@@ -32,11 +34,13 @@ function ServicesTable() {
                 <tr>
                     <th>Name</th>
                     <th>URL</th>
+                    <th>Creation Time</th>
                     <th>Status</th>
                 </tr>
                 {services.map((service, i) => <tr key={i}>
                     <td>{service.name}</td>
                     <td>{service.url}</td>
+                    <td>{formattedDate(service.createdDate)}</td>
                     <td>{service.status}</td>
                 </tr>)}
                 </tbody>

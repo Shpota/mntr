@@ -16,13 +16,25 @@ function AddServiceForm() {
         })
     }
 
+    let isValidUrl = (url) => {
+        let parsed;
+        try {
+            parsed = new URL(url);
+        } catch (_) {
+            return false;
+        }
+        return parsed.protocol === "http:" || parsed.protocol === "https:";
+    }
+
     return <div className="add-service">
         <input type="text" placeholder="Enter service name" value={name}
                onChange={(event) => setName(event.target.value)}/>
         <input type="text" placeholder="Enter URL" value={url} onChange={(event) => setUrl(event.target.value)}/>
-        <button className="favorite styled" type="button" disabled={!name || !url} onClick={onFormSubmit}>
+        <button className="favorite styled" type="button" disabled={!name || !url || !isValidUrl(url)} onClick={onFormSubmit}>
             Add service
         </button>
+        {url && !isValidUrl(url) && (<p className="validation-error">Please specify valid URL including protocol, eg https://facebook.com</p>)}
+
     </div>
 }
 
