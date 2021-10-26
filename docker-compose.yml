@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 services:
   mntr-db:
     image: postgres:14.0-alpine3.14
@@ -8,21 +8,33 @@ services:
       POSTGRES_DB: mntr
     volumes:
       - ./server/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: pg_isready -U mntr -d mntr
+      interval: 30s
+      timeout: 3s
+      retries: 10
   mntr-server:
     build: server
     container_name: mntr-server
     ports:
       - 8080:8080
     depends_on:
-      - mntr-db
+      mntr-db:
+        condition: service_healthy
     environment:
       DB_HOST: mntr-db
       DB_USER: mntr
       DB_PASSWORD: mntr
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/services" ]
+      interval: 30s
+      timeout: 10s
+      retries: 10
   mntr-client:
     build: client
     container_name: mntr-client
     ports:
       - 3000:3000
     depends_on:
-      - mntr-server
+      mntr-server:
+        condition: service_healthy
